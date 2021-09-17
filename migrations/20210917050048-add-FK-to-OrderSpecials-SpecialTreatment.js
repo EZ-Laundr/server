@@ -1,18 +1,22 @@
 "use strict";
 
 module.exports = {
-  up: async (queryInterface, Sequelize) => {
-    await queryInterface.addColumn("SpecialTreatments", "OrderId", {
-      type: Sequelize.INTEGER,
-      references: {
-        model: "Orders",
-      },
-      onUpdate: "cascade",
-      onDelete: "cascade",
-    });
-  },
+	up: async (queryInterface, Sequelize) => {
+		await queryInterface.addColumn("OrderSpecials", "SpecialTreatmentId", {
+			type: Sequelize.INTEGER,
+			references: {
+				model: "SpecialTreatments",
+			},
+			onUpdate: "cascade",
+			onDelete: "cascade",
+		});
+	},
 
-  down: async (queryInterface, Sequelize) => {
-    await queryInterface.removeColumn("SpecialTreatments", "OrderId", {});
-  },
+	down: async (queryInterface, Sequelize) => {
+		await queryInterface.removeColumn(
+			"OrderSpecials",
+			"SpecialTreatmentId",
+			{}
+		);
+	},
 };
