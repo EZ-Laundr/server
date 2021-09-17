@@ -1,0 +1,32 @@
+{
+    "dummyUser": {
+        "email": "dummy@mail.com",
+        "password": "dummy"
+    },
+    "dummyNoEmail": {
+        "password": "dummy"
+    },
+    "dummyNoPass": {
+        "email": "dummy@mail.com"
+    },
+    "dummyEmailEmptyStr": {
+        "email": "",
+        "password": "dummy"
+    },
+    "dummyPassEmptyStr": {
+        "email": "dummy@mail.com",
+        "password": ""
+    },
+    "dummyWrongEmailFormat": {
+        "email": "dummy",
+        "password": "dummy"
+    },
+    "dummyWrongPass": {
+        "email": "dummy@mail.com",
+        "password": "dumdum"
+    },
+    "dummyWrongEmail": {
+        "email": "dumdum@mail.com",
+        "password": "dummy"
+    }
+}
