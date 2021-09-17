@@ -10,16 +10,16 @@ router.post("/login", Controller.login);
 router.post("/admin/register", Controller.helloWorld);
 router.post("/admin/login", Controller.helloWorld);
 
-router.get("/perfumes", Controller.helloWorld);
-router.get("/special-treatments", Controller.helloWorld);
-router.get("/services", Controller.helloWorld);
+router.get("/perfumes", Controller.getPerfumes);
+router.get("/special-treatments", Controller.getServices);
+router.get("/services", Controller.getSpecialTreatments);
 
 router.use(authentication);
 
-router.get("/orders", Controller.helloWorld);
-router.get("/orders/:id", Controller.helloWorld);
+router.get("/orders", Controller.getOrders);
+router.get("/orders/:id", Controller.getOrdersById);
 
-router.post("/orders", Controller.helloWorld);
+router.post("/orders", Controller.postOrders);
 
 router.use(onlyAdmin);
 router.use("/admin", adminRouter);

@@ -1,6 +1,13 @@
 const { signToken } = require("../helpers/jwt");
 const { checkPassword } = require("../helpers/bcrypt");
-const { User } = require("../models");
+const {
+	User,
+	Perfume,
+	Service,
+	SpecialTreatment,
+	Order,
+	OrderSpecial,
+} = require("../models");
 
 class Controller {
 	static helloWorld(req, res, next) {
@@ -48,7 +55,6 @@ class Controller {
 					role: "customer",
 				},
 			});
-			console.log(1, result);
 			if (!result) {
 				throw {
 					name: "Unauthorized",
@@ -78,7 +84,127 @@ class Controller {
 				access_token,
 			});
 		} catch (err) {
-			console.log(err);
+			next(err);
+		}
+	}
+
+	static async getPerfumes(req, res, next) {
+		try {
+			const result = await Perfume.findAll();
+
+			res.status(200).json(result);
+		} catch (err) {
+			next(err);
+		}
+	}
+
+	static async getServices(req, res, next) {
+		try {
+			const result = await Service.findAll();
+
+			res.status(200).json(result);
+		} catch (err) {
+			next(err);
+		}
+	}
+
+	static async getSpecialTreatments(req, res, next) {
+		try {
+			const result = await SpecialTreatment.findAll();
+
+			res.status(200).json(result);
+		} catch (err) {
+			next(err);
+		}
+	}
+
+	static async getOrders(req, res, next) {
+		try {
+			const { id: UserId } = req.user;
+			const result = await Order.findAll({
+				where: {
+					UserId,
+				},
+				include: [{ model: OrderSpecial, include: [SpecialTreatment] }],
+				order: [["updatedAt", "DESC"]],
+			});
+
+			res.status(200).json(result);
+		} catch (err) {
+			next(err);
+		}
+	}
+
+	static async getOrdersById(req, res, next) {
+		try {
+			const { id: UserId } = req.user;
+			const id = req.params.id;
+
+			const result = await Order.findOne({
+				where: {
+					id,
+					UserId,
+				},
+				include: [
+					{ model: OrderSpecial, include: [SpecialTreatment] },
+					Service,
+				],
+			});
+
+			res.status(200).json(result);
+		} catch (err) {
+			next(err);
+		}
+	}
+
+	static async postOrders(req, res, next) {
+		try {
+			const { id: UserId } = req.user;
+			const { pickup, ServiceId, perfume, treatments } = req.body;
+			const payload = {
+				weight: 0,
+				status: "pending",
+				totalPrice: 0,
+				pickup,
+				UserId,
+				ServiceId,
+				PerfumeId: perfume.id,
+			};
+			const result = await Order.create(payload, { include: ["Perfume"] });
+
+			const { id } = result;
+
+			const specialPayload = treatments.map((treatment) => {
+				return {
+					SpecialTreatmentId: treatment.id,
+					quantity: treatment.qty,
+					OrderId: id,
+					price: treatment.qty * treatment.price,
+				};
+			});
+
+			const result2 = await OrderSpecial.bulkCreate(specialPayload, {
+				returning: true,
+				include: [Order],
+			});
+
+			const newPrice = result2.map((e) => e.price);
+			const totalPrice = newPrice.reduce((a, b) => a + b);
+
+			const result3 = await Order.update(
+				{
+					totalPrice: totalPrice + perfume.price,
+				},
+				{
+					where: {
+						id,
+					},
+					returning: true,
+				}
+			);
+
+			res.status(200).json(result3);
+		} catch (err) {
 			next(err);
 		}
 	}
