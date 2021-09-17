@@ -13,7 +13,10 @@ router.post("/special-treatments", AdminController.addSpecialTreatment);
 
 router.put("/perfumes/:id", AdminController.editPerfume);
 router.put("/services/:id", AdminController.editService);
+router.put("/orders/:id", AdminController.editOrder);
 router.put("/special-treatments/:id", AdminController.editSpecialTreatment);
+
+router.patch("/orders/:id", AdminController.editOrder);
 
 router.delete("/perfumes/:id", AdminController.deletePerfume);
 router.delete("/services/:id", AdminController.deleteService);
