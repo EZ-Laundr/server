@@ -1,4 +1,4 @@
-const sign = require("jsonwebtoken/sign");
+const { signToken } = require("../helpers/jwt");
 const { checkPassword } = require("../helpers/bcrypt");
 const { User } = require("../models");
 
@@ -22,17 +22,15 @@ class Controller {
 			};
 
 			const result = await User.create(payload);
-
-			const access_token = sign({
+			const access_token = signToken({
 				id: result.id,
 				email,
 				phoneNumber,
 				role: result.role,
 			});
-
 			res.status(201).json({
 				email,
-				role,
+				role: result.role,
 				access_token,
 			});
 		} catch (err) {
@@ -44,13 +42,13 @@ class Controller {
 		try {
 			const { email, password } = req.body;
 
-			const result = User.findOne({
+			const result = await User.findOne({
 				where: {
 					email,
 					role: "customer",
 				},
 			});
-
+			console.log(1, result);
 			if (!result) {
 				throw {
 					name: "Unauthorized",
@@ -80,6 +78,7 @@ class Controller {
 				access_token,
 			});
 		} catch (err) {
+			console.log(err);
 			next(err);
 		}
 	}

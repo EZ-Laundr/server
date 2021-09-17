@@ -15,7 +15,7 @@
   "scripts": {
     "dev": "nodemon bin/www",
     "start": "node app.js",
-    "test": "jest --detectOpenHandles --forceExit"
+    "test": "jest --detectOpenHandles --forceExit --coverage"
   },
   "repository": {
     "type": "git",

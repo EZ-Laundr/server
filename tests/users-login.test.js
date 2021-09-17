@@ -9,6 +9,7 @@ const {
 
 beforeAll((done) => {
 	User.create({
+		phoneNumber: dummyUser.phoneNumber,
 		email: dummyUser.email,
 		password: dummyUser.password,
 		role: "customer",
@@ -36,7 +37,7 @@ describe("POST /login [wrong pass]", () => {
 			.then((response) => {
 				expect(response.status).toBe(401);
 				expect(response.body).toEqual({
-					message: ["invalid username or email password"],
+					msg: ["invalid username or email password"],
 				});
 				done();
 			})
@@ -55,7 +56,7 @@ describe("POST /login [email has not registered yet]", () => {
 			.then((response) => {
 				expect(response.status).toBe(401);
 				expect(response.body).toEqual({
-					message: ["invalid username or email password"],
+					msg: ["invalid username or email password"],
 				});
 				done();
 			})

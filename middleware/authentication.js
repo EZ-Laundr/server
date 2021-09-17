@@ -1,10 +1,10 @@
 const { User } = require("../models");
-const { verify } = require("../helpers/jwt");
+const { verifyToken } = require("../helpers/jwt");
 
 const authentication = async (req, res, next) => {
 	try {
 		const { access_token } = req.headers;
-		const payload = await verify(access_token);
+		const payload = await verifyToken(access_token);
 		const userData = await User.findOne({
 			where: {
 				email: payload.email,
