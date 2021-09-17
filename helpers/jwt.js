@@ -6,6 +6,6 @@ function signToken(payload) {
 }
 function verifyToken(token) {
   return jwt.verify(token, secretcode);
-
+}
 
 module.exports = { verifyToken, signToken };
