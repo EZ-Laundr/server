@@ -1,10 +1,13 @@
 const router = require("express").Router();
 const Controller = require("../controllers/controller");
+
 const AdminController = require("../controllers/adminController");
+
 const authentication = require("../middleware/authentication");
 const onlyAdmin = require("../middleware/authorization");
 const errorHandling = require("../middleware/errorHandling");
 const adminRouter = require("./adminRoute");
+
 
 router.post("/register", Controller.helloWorld);
 router.post("/login", Controller.helloWorld);
