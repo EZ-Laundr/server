@@ -1,32 +1,41 @@
 {
     "dummyUser": {
+        "phoneNumber":"123456",
         "email": "dummy@mail.com",
         "password": "dummy"
     },
     "dummyNoEmail": {
+        "phoneNumber":"123456",
         "password": "dummy"
     },
     "dummyNoPass": {
+        "phoneNumber":"123456",
         "email": "dummy@mail.com"
     },
     "dummyEmailEmptyStr": {
+        "phoneNumber":"123456",
         "email": "",
         "password": "dummy"
     },
     "dummyPassEmptyStr": {
+        "phoneNumber":"123456",
         "email": "dummy@mail.com",
         "password": ""
     },
     "dummyWrongEmailFormat": {
+        "phoneNumber":"123456",
         "email": "dummy",
         "password": "dummy"
     },
     "dummyWrongPass": {
+        "phoneNumber":"123456",
         "email": "dummy@mail.com",
         "password": "dumdum"
     },
     "dummyWrongEmail": {
+        "phoneNumber":"123456",
         "email": "dumdum@mail.com",
         "password": "dummy"
     }
+    
 }

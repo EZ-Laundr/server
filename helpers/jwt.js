@@ -2,10 +2,10 @@ const jwt = require("jsonwebtoken");
 const secretcode = "koderahasia";
 
 function signToken(payload) {
-  return jwt.sign(payload, secretcode);
+	return jwt.sign(payload, secretcode);
 }
 function verifyToken(token) {
-  return jwt.verify(token, secretcode);
+	return jwt.verify(token, secretcode);
 }
 
 module.exports = { verifyToken, signToken };

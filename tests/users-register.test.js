@@ -29,7 +29,7 @@ describe("POST /register [no email]", () => {
 			.then((response) => {
 				expect(response.status).toBe(400);
 				expect(response.body).toEqual({
-					message: ["email cannot be empty"],
+					msg: ["email cannot be empty"],
 				});
 				done();
 			})
@@ -48,7 +48,7 @@ describe("POST /register [no pass]", () => {
 			.then((response) => {
 				expect(response.status).toBe(400);
 				expect(response.body).toEqual({
-					message: ["password cannot be empty"],
+					msg: ["password cannot be empty"],
 				});
 				done();
 			})
@@ -67,7 +67,7 @@ describe("POST /register [email empty string]", () => {
 			.then((response) => {
 				expect(response.status).toBe(400);
 				expect(response.body).toEqual({
-					message: ["email cannot be empty", "email must be in email format"],
+					msg: ["email cannot be empty", "email must be in email format"],
 				});
 				done();
 			})
@@ -86,7 +86,7 @@ describe("POST /register [password empty string]", () => {
 			.then((response) => {
 				expect(response.status).toBe(400);
 				expect(response.body).toEqual({
-					message: ["password cannot be empty"],
+					msg: ["password cannot be empty"],
 				});
 				done();
 			})
@@ -105,7 +105,7 @@ describe("POST /register [wrong email format]", () => {
 			.then((response) => {
 				expect(response.status).toBe(400);
 				expect(response.body).toEqual({
-					message: ["email must be in email format"],
+					msg: ["email must be in email format"],
 				});
 				done();
 			})
@@ -144,7 +144,7 @@ describe("POST /register [email already in use]", () => {
 			.then((response) => {
 				expect(response.status).toBe(400);
 				expect(response.body).toEqual({
-					message: ["email address already exist"],
+					msg: ["email address already exist"],
 				});
 				done();
 			})
