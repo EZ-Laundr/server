@@ -1,14 +1,18 @@
 const router = require("express").Router();
 const Controller = require("../controllers/controller");
+
+const AdminController = require("../controllers/adminController");
+
 const authentication = require("../middleware/authentication");
 const onlyAdmin = require("../middleware/authorization");
 const errorHandling = require("../middleware/errorHandling");
 const adminRouter = require("./adminRoute");
 
-router.post("/register", Controller.register);
-router.post("/login", Controller.login);
-router.post("/admin/register", Controller.helloWorld);
-router.post("/admin/login", Controller.helloWorld);
+
+router.post("/register", Controller.helloWorld);
+router.post("/login", Controller.helloWorld);
+router.post("/admin/login", AdminController.adminLogin);
+router.post("/admin/register", AdminController.adminRegister);
 
 router.get("/perfumes", Controller.helloWorld);
 router.get("/special-treatments", Controller.helloWorld);
