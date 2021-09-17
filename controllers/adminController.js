@@ -217,7 +217,7 @@ class AdminController {
           let editedValue = edit[1][0].dataValues;
           delete editedValue.createdAt;
           delete editedValue.updatedAt;
-          res.status(200).json({ Edited: editedValue });
+          res.status(200).json(editedValue);
         }
       }
     } catch (error) {
@@ -244,7 +244,7 @@ class AdminController {
           let editedValue = edit[1][0].dataValues;
           delete editedValue.createdAt;
           delete editedValue.updatedAt;
-          res.status(200).json({ Edited: editedValue });
+          res.status(200).json(editedValue);
         }
       }
     } catch (error) {
@@ -271,7 +271,36 @@ class AdminController {
           let editedValue = edit[1][0].dataValues;
           delete editedValue.createdAt;
           delete editedValue.updatedAt;
-          res.status(200).json({ Edited: editedValue });
+          res.status(200).json(editedValue);
+        }
+      }
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async editOrder(req, res, next) {
+    const { id } = req.params;
+    try {
+      let result = await Order.findByPk(id, { include: [Service] });
+      if (result) {
+        const weight = +req.body.weight;
+        const servicePrice = result.dataValues.Service.price;
+        const oldPrice = result.dataValues.totalPrice;
+        const data = {
+          weight,
+          status: "diterima",
+          totalPrice: oldPrice + servicePrice * weight,
+        };
+        let edit = await Order.update(data, {
+          where: { id },
+          returning: true,
+        });
+        if (edit) {
+          let editedValue = edit[1][0].dataValues;
+          delete editedValue.createdAt;
+          delete editedValue.updatedAt;
+          res.status(200).json(editedValue);
         }
       }
     } catch (error) {
