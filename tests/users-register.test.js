@@ -67,7 +67,7 @@ describe("POST /register [email empty string]", () => {
 			.then((response) => {
 				expect(response.status).toBe(400);
 				expect(response.body).toEqual({
-					message: ["email cannot be empty", "email must be email format"],
+					message: ["email cannot be empty", "email must be in email format"],
 				});
 				done();
 			})
@@ -105,7 +105,7 @@ describe("POST /register [wrong email format]", () => {
 			.then((response) => {
 				expect(response.status).toBe(400);
 				expect(response.body).toEqual({
-					message: ["email must be email format"],
+					message: ["email must be in email format"],
 				});
 				done();
 			})
@@ -144,7 +144,7 @@ describe("POST /register [email already in use]", () => {
 			.then((response) => {
 				expect(response.status).toBe(400);
 				expect(response.body).toEqual({
-					message: ["email address already in use!"],
+					message: ["email address already exist"],
 				});
 				done();
 			})

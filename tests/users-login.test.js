@@ -74,7 +74,6 @@ describe("POST /login [has email and password]", () => {
 			.then((response) => {
 				expect(response.status).toBe(200);
 				expect(response.body).toHaveProperty("email", dummyUser.email);
-				expect(response.body).toHaveProperty("role", "customer");
 				expect(response.body).toHaveProperty("access_token");
 				expect(response.body).not.toHaveProperty("password");
 				done();
