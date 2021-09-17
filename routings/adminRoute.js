@@ -1,22 +1,25 @@
 const router = require("express").Router();
-const Controller = require("../controllers/controller");
+const AdminController = require("../controllers/adminController");
 
-router.get("/orders", Controller.helloWorld);
-router.get("/orders/:id", Controller.helloWorld);
-router.get("/perfumes", Controller.helloWorld);
-router.get("/services", Controller.helloWorld);
-router.get("/special-treatments", Controller.helloWorld);
+router.get("/orders", AdminController.getOrders);
+router.get("/orders/:id", AdminController.getById);
+router.get("/perfumes", AdminController.getPerfumes);
+router.get("/services", AdminController.getServices);
+router.get("/special-treatments", AdminController.getSpecialTreatments);
 
-router.post("/perfumes", Controller.helloWorld);
-router.post("/services", Controller.helloWorld);
-router.post("/special-treatments", Controller.helloWorld);
+router.post("/perfumes", AdminController.addPerfume);
+router.post("/services", AdminController.addService);
+router.post("/special-treatments", AdminController.addSpecialTreatment);
 
-router.put("/perfumes", Controller.helloWorld);
-router.put("/services", Controller.helloWorld);
-router.put("/special-treatments", Controller.helloWorld);
+router.put("/perfumes/:id", AdminController.editPerfume);
+router.put("/services/:id", AdminController.editService);
+router.put("/special-treatments/:id", AdminController.editSpecialTreatment);
 
-router.delete("/perfumes", Controller.helloWorld);
-router.delete("/services", Controller.helloWorld);
-router.delete("/special-treatments", Controller.helloWorld);
+router.delete("/perfumes/:id", AdminController.deletePerfume);
+router.delete("/services/:id", AdminController.deleteService);
+router.delete(
+  "/special-treatments/:id",
+  AdminController.deleteSpecialTreatment
+);
 
 module.exports = router;
