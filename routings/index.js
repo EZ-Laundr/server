@@ -5,8 +5,9 @@ const onlyAdmin = require("../middleware/authorization");
 const errorHandling = require("../middleware/errorHandling");
 const adminRouter = require("./adminRoute");
 
-router.post("/register", Controller.helloWorld);
-router.post("/login", Controller.helloWorld);
+router.post("/register", Controller.register);
+router.post("/login", Controller.login);
+router.post("/admin/register", Controller.helloWorld);
 router.post("/admin/login", Controller.helloWorld);
 
 router.get("/perfumes", Controller.helloWorld);
