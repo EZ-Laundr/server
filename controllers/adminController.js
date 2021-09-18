@@ -120,7 +120,7 @@ class AdminController {
     };
     try {
       const result = await User.create(data);
-      res.status(201).json(result);
+      res.status(201).json({ email: result.email, role: result.role });
     } catch (error) {
       next(error);
     }
@@ -213,12 +213,10 @@ class AdminController {
           where: { id },
           returning: true,
         });
-        if (edit) {
-          let editedValue = edit[1][0].dataValues;
-          delete editedValue.createdAt;
-          delete editedValue.updatedAt;
-          res.status(200).json(editedValue);
-        }
+        let editedValue = edit[1][0].dataValues;
+        delete editedValue.createdAt;
+        delete editedValue.updatedAt;
+        res.status(200).json(editedValue);
       }
     } catch (error) {
       next(error);
@@ -240,12 +238,10 @@ class AdminController {
           where: { id },
           returning: true,
         });
-        if (edit) {
-          let editedValue = edit[1][0].dataValues;
-          delete editedValue.createdAt;
-          delete editedValue.updatedAt;
-          res.status(200).json(editedValue);
-        }
+        let editedValue = edit[1][0].dataValues;
+        delete editedValue.createdAt;
+        delete editedValue.updatedAt;
+        res.status(200).json(editedValue);
       }
     } catch (error) {
       next(error);
@@ -267,12 +263,10 @@ class AdminController {
           where: { id },
           returning: true,
         });
-        if (edit) {
-          let editedValue = edit[1][0].dataValues;
-          delete editedValue.createdAt;
-          delete editedValue.updatedAt;
-          res.status(200).json(editedValue);
-        }
+        let editedValue = edit[1][0].dataValues;
+        delete editedValue.createdAt;
+        delete editedValue.updatedAt;
+        res.status(200).json(editedValue);
       }
     } catch (error) {
       next(error);
@@ -283,25 +277,23 @@ class AdminController {
     const { id } = req.params;
     try {
       let result = await Order.findByPk(id, { include: [Service] });
-      if (result) {
-        const weight = +req.body.weight;
-        const servicePrice = result.dataValues.Service.price;
-        const oldPrice = result.dataValues.totalPrice;
-        const data = {
-          weight,
-          status: "diterima",
-          totalPrice: oldPrice + servicePrice * weight,
-        };
-        let edit = await Order.update(data, {
-          where: { id },
-          returning: true,
-        });
-        if (edit) {
-          let editedValue = edit[1][0].dataValues;
-          delete editedValue.createdAt;
-          delete editedValue.updatedAt;
-          res.status(200).json(editedValue);
-        }
+      const weight = +req.body.weight;
+      const servicePrice = result.dataValues.Service.price;
+      const oldPrice = result.dataValues.totalPrice;
+      const data = {
+        weight,
+        status: "diterima",
+        totalPrice: oldPrice + servicePrice * weight,
+      };
+      let edit = await Order.update(data, {
+        where: { id },
+        returning: true,
+      });
+      if (edit) {
+        let editedValue = edit[1][0].dataValues;
+        delete editedValue.createdAt;
+        delete editedValue.updatedAt;
+        res.status(200).json(editedValue);
       }
     } catch (error) {
       next(error);
@@ -312,15 +304,9 @@ class AdminController {
     const { id } = req.params;
     try {
       let result = await Perfume.destroy({ where: { id } });
-      if (result) {
-        res
-          .status(201)
-          .json({ msg: `Perfume with id ${id} has been deleted succesfully` });
-      } else {
-        throw {
-          name: "NotFound",
-        };
-      }
+      res
+        .status(201)
+        .json({ msg: `Perfume with id ${id} has been deleted succesfully` });
     } catch (error) {
       next(error);
     }
@@ -330,15 +316,9 @@ class AdminController {
     const { id } = req.params;
     try {
       let result = await Service.destroy({ where: { id } });
-      if (result) {
-        res
-          .status(201)
-          .json({ msg: `Service with id ${id} has been deleted succesfully` });
-      } else {
-        throw {
-          name: "NotFound",
-        };
-      }
+      res
+        .status(201)
+        .json({ msg: `Service with id ${id} has been deleted succesfully` });
     } catch (error) {
       next(error);
     }
@@ -348,15 +328,9 @@ class AdminController {
     const { id } = req.params;
     try {
       let result = await SpecialTreatment.destroy({ where: { id } });
-      if (result) {
-        res.status(201).json({
-          msg: `Special Treatment with id ${id} has been deleted succesfully`,
-        });
-      } else {
-        throw {
-          name: "NotFound",
-        };
-      }
+      res.status(201).json({
+        msg: `Special Treatment with id ${id} has been deleted succesfully`,
+      });
     } catch (error) {
       next(error);
     }
