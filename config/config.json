@@ -1,14 +1,14 @@
 {
     "development": {
         "username": "postgres",
-        "password": "r1singsun",
+        "password": "postgres",
         "database": "laundr",
         "host": "localhost",
         "dialect": "postgres"
     },
     "test": {
         "username": "postgres",
-        "password": "r1singsuN",
+        "password": "postgres",
         "database": "laundr_test",
         "host": "localhost",
         "dialect": "postgres"
