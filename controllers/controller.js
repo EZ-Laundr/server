@@ -143,6 +143,7 @@ class Controller {
 				},
 				include: [
 					{ model: OrderSpecial, include: [SpecialTreatment] },
+					Perfume,
 					Service,
 				],
 			});
