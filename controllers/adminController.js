@@ -39,6 +39,13 @@ class AdminController {
 					Perfume,
 				],
 			});
+
+			if (!result) {
+				throw {
+					name: "NotFound",
+				};
+			}
+
 			res.status(200).json(result);
 		} catch (error) {
 			next(error);
@@ -94,7 +101,10 @@ class AdminController {
 					msg: "invalid username or email password",
 				};
 			} else if (result.dataValues.role !== "admin") {
-				res.status(401).json({ msg: "You are not an admin" });
+				throw {
+					name: "Forbidden",
+					msg: "You are not an admin",
+				};
 			} else {
 				if (checkPassword(password, result.dataValues.password)) {
 					const { id, phoneNumber, role } = result.dataValues;
@@ -292,6 +302,13 @@ class AdminController {
 		const { id } = req.params;
 		try {
 			let result = await Order.findByPk(id, { include: [Service] });
+
+			if (!result) {
+				throw {
+					name: "NotFound",
+				};
+			}
+
 			const weight = +req.body.weight;
 			const servicePrice = result.dataValues.Service.price;
 			const oldPrice = result.dataValues.totalPrice;
@@ -319,6 +336,13 @@ class AdminController {
 		const { id } = req.params;
 		try {
 			let result = await Perfume.destroy({ where: { id } });
+
+			if (!result) {
+				throw {
+					name: "NotFound",
+				};
+			}
+
 			res
 				.status(201)
 				.json({ msg: `Perfume with id ${id} has been deleted succesfully` });
@@ -331,6 +355,13 @@ class AdminController {
 		const { id } = req.params;
 		try {
 			let result = await Service.destroy({ where: { id } });
+
+			if (!result) {
+				throw {
+					name: "NotFound",
+				};
+			}
+
 			res
 				.status(201)
 				.json({ msg: `Service with id ${id} has been deleted succesfully` });
@@ -343,6 +374,13 @@ class AdminController {
 		const { id } = req.params;
 		try {
 			let result = await SpecialTreatment.destroy({ where: { id } });
+
+			if (!result) {
+				throw {
+					name: "NotFound",
+				};
+			}
+
 			res.status(201).json({
 				msg: `Special Treatment with id ${id} has been deleted succesfully`,
 			});
