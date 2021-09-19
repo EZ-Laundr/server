@@ -8,7 +8,7 @@
   },
   "test": {
     "username": "postgres",
-    "password": "r1singsuN",
+    "password": "postgres",
     "database": "laundr_test",
     "host": "localhost",
     "dialect": "postgres"

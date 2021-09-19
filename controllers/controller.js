@@ -10,14 +10,6 @@ const {
 } = require("../models");
 
 class Controller {
-	static helloWorld(req, res, next) {
-		try {
-			res.send("Hello world");
-		} catch (err) {
-			next(err);
-		}
-	}
-
 	static async register(req, res, next) {
 		try {
 			const { email, password, phoneNumber } = req.body;
