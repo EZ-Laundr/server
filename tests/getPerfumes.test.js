@@ -105,21 +105,6 @@ describe("GET /admin/perfumes", () => {
 	});
 });
 
-describe("GET /admin/perfumes/:id", () => {
-	test("not found", (done) => {
-		request(app)
-			.get(`/admin/perfumes/${testedId + 1}`)
-			.set("access_token", access_token)
-			.then((response) => {
-				expect(response.status).toBe(404);
-				done();
-			})
-			.catch((err) => {
-				done(err);
-			});
-	});
-});
-
 describe("POST admin/perfumes", () => {
 	test("success", (done) => {
 		request(app)
@@ -137,6 +122,36 @@ describe("POST admin/perfumes", () => {
 				expect(response.body).toHaveProperty("price");
 				expect(response.body).toHaveProperty("imageUrl");
 				testedId = response.body.id;
+				done();
+			})
+			.catch((err) => {
+				done(err);
+			});
+	});
+});
+
+describe("GET /admin/perfumes/:id", () => {
+	test("success", (done) => {
+		request(app)
+			.get(`/admin/perfumes/${testedId}`)
+			.set("access_token", access_token)
+			.then((response) => {
+				expect(response.status).toBe(200);
+				done();
+			})
+			.catch((err) => {
+				done(err);
+			});
+	});
+});
+
+describe("GET /admin/perfumes/:id", () => {
+	test("not found", (done) => {
+		request(app)
+			.get(`/admin/perfumes/${testedId + 1}`)
+			.set("access_token", access_token)
+			.then((response) => {
+				expect(response.status).toBe(404);
 				done();
 			})
 			.catch((err) => {
