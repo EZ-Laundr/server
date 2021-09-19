@@ -6,67 +6,67 @@ const { signToken } = require("../helpers/jwt");
 let access_token;
 
 beforeAll((done) => {
-    User.create({
-        phoneNumber: dummyUser.phoneNumber,
-        email: dummyUser.email,
-        password: dummyUser.password,
-        role: "admin",
-    })
-        .then((result) => {
-            access_token = signToken({
-                id: result.id,
-                email: result.email,
-                phoneNumber: result.phoneNumber,
-                role: result.role,
-            });
-            done();
-        })
-        .catch((err) => done(err));
+	User.create({
+		phoneNumber: dummyUser.phoneNumber,
+		email: dummyUser.email,
+		password: dummyUser.password,
+		role: "admin",
+	})
+		.then((result) => {
+			access_token = signToken({
+				id: result.id,
+				email: result.email,
+				phoneNumber: result.phoneNumber,
+				role: result.role,
+			});
+			done();
+		})
+		.catch((err) => done(err));
 });
 
 afterAll((done) => {
-    User.destroy({
-        truncate: true,
-        cascade: true,
-        restartIdentity: true,
-    })
-        .then(() => done())
-        .catch((err) => done(err));
+	User.destroy({
+		truncate: true,
+		cascade: true,
+		restartIdentity: true,
+	})
+		.then(() => done())
+		.catch((err) => done(err));
 });
 
 describe("GET /services", () => {
-    test("success", (done) => {
-        request(app)
-            .get("/services")
-            .then((response) => {
-                expect(response.status).toBe(200);
-                expect(response.body[0]).toHaveProperty("id");
-                expect(response.body[0]).toHaveProperty("name");
-                expect(response.body[0]).toHaveProperty("price");
-                expect(response.body[0]).toHaveProperty("imageUrl");
-                done();
-            })
-            .catch((err) => {
-                done(err);
-            });
-    });
+	test("success", (done) => {
+		request(app)
+			.get("/services")
+			.then((response) => {
+				expect(response.status).toBe(200);
+				expect(response.body[0]).toHaveProperty("id");
+				expect(response.body[0]).toHaveProperty("name");
+				expect(response.body[0]).toHaveProperty("price");
+				expect(response.body[0]).toHaveProperty("imageUrl");
+				done();
+			})
+			.catch((err) => {
+				done(err);
+			});
+	});
 });
 
 describe("GET /admin/services", () => {
-    test("success", (done) => {
-        request(app)
-            .get("/admin/services")
-            .set("access_token", access_token)
-            .then((response) => {
-                expect(response.status).toBe(200);
-                expect(response.body[0]).toHaveProperty("id");
-                expect(response.body[0]).toHaveProperty("name");
-                expect(response.body[0]).toHaveProperty("price");
-                expect(response.body[0]).toHaveProperty("imageUrl");
-                done();
-            })
-            .catch((err) => {
-                done(err);
-            });
-    });
+	test("success", (done) => {
+		request(app)
+			.get("/admin/services")
+			.set("access_token", access_token)
+			.then((response) => {
+				expect(response.status).toBe(200);
+				expect(response.body[0]).toHaveProperty("id");
+				expect(response.body[0]).toHaveProperty("name");
+				expect(response.body[0]).toHaveProperty("price");
+				expect(response.body[0]).toHaveProperty("imageUrl");
+				done();
+			})
+			.catch((err) => {
+				done(err);
+			});
+	});
 });
