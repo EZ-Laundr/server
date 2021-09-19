@@ -152,7 +152,7 @@ class Controller {
 	static async postOrders(req, res, next) {
 		try {
 			const { id: UserId } = req.user;
-			const {
+			let {
 				pickup,
 				ServiceId,
 				perfume,
@@ -160,6 +160,7 @@ class Controller {
 				customerAddress,
 				rangeAddress,
 			} = req.body;
+
 			const payload = {
 				weight: 0,
 				status: "pending",
@@ -167,8 +168,8 @@ class Controller {
 				pickup,
 				UserId,
 				ServiceId,
-				customerAddress,
-				rangeAddress,
+				customerAddress: customerAddress || "",
+				rangeAddress: rangeAddress || 0,
 				PerfumeId: perfume.id,
 			};
 			const result = await Order.create(payload, { include: ["Perfume"] });
@@ -204,7 +205,7 @@ class Controller {
 				}
 			);
 
-			res.status(200).json(result3);
+			res.status(200).json(result3[1][0]);
 		} catch (err) {
 			next(err);
 		}

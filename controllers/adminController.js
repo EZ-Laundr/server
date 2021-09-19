@@ -295,7 +295,7 @@ class AdminController {
 			const oldPrice = result.dataValues.totalPrice;
 			const data = {
 				weight,
-				status: "diterima",
+				status: "On Progress",
 				totalPrice: oldPrice + servicePrice * weight,
 			};
 			let edit = await Order.update(data, {
