@@ -29,6 +29,14 @@ module.exports = {
 					createdAt: new Date(),
 					updatedAt: new Date(),
 				},
+				{
+					name: "kilat",
+					price: 3000,
+					imageUrl:
+						"https://ik.imagekit.io/ariefkoko/setrikaaja_5B3y0bXxXp1.png?updatedAt=1631886899983",
+					createdAt: new Date(),
+					updatedAt: new Date(),
+				},
 			],
 			{}
 		);

@@ -23,7 +23,6 @@ class AdminController {
 
 			res.status(200).json(result);
 		} catch (error) {
-			console.log(error);
 			next(error);
 		}
 	}
@@ -154,6 +153,7 @@ class AdminController {
 				},
 			});
 			res.status(201).json({
+				id: result.dataValues.id,
 				name: result.dataValues.name,
 				price: result.dataValues.price,
 				imageUrl: result.dataValues.imageUrl,
@@ -178,6 +178,7 @@ class AdminController {
 				},
 			});
 			res.status(201).json({
+				id: result.dataValues.id,
 				name: result.dataValues.name,
 				price: result.dataValues.price,
 				imageUrl: result.dataValues.imageUrl,
@@ -202,6 +203,7 @@ class AdminController {
 				},
 			});
 			res.status(201).json({
+				id: result.dataValues.id,
 				name: result.dataValues.name,
 				price: result.dataValues.price,
 				imageUrl: result.dataValues.imageUrl,
@@ -241,7 +243,7 @@ class AdminController {
 		const { name, price, imageUrl } = req.body;
 		let data = {
 			name,
-			price: Number(price),
+			price,
 			imageUrl,
 		};
 		try {
