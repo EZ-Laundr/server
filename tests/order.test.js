@@ -282,3 +282,37 @@ describe("GET /admin/order/:id", () => {
 			});
 	});
 });
+
+describe("PATCH /admin/orders/:id", () => {
+	test("fail", (done) => {
+		request(app)
+			.patch("/admin/orders/99")
+			.set("Accept", "application/json")
+			.set("access_token", access_token_admin)
+
+			.then((response) => {
+				expect(response.status).toBe(404);
+				done();
+			})
+			.catch((err) => {
+				done(err);
+			});
+	});
+});
+
+describe("PATCH /admin/orders/:id", () => {
+	test("success", (done) => {
+		request(app)
+			.patch("/admin/orders/1")
+			.set("Accept", "application/json")
+			.set("access_token", access_token_admin)
+
+			.then((response) => {
+				expect(response.status).toBe(200);
+				done();
+			})
+			.catch((err) => {
+				done(err);
+			});
+	});
+});

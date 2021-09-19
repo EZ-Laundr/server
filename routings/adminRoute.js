@@ -16,13 +16,13 @@ router.put("/services/:id", AdminController.editService);
 router.put("/orders/:id", AdminController.editOrder);
 router.put("/special-treatments/:id", AdminController.editSpecialTreatment);
 
-router.patch("/orders/:id", AdminController.editOrder);
+router.patch("/orders/:id", AdminController.changeStatus);
 
 router.delete("/perfumes/:id", AdminController.deletePerfume);
 router.delete("/services/:id", AdminController.deleteService);
 router.delete(
-  "/special-treatments/:id",
-  AdminController.deleteSpecialTreatment
+	"/special-treatments/:id",
+	AdminController.deleteSpecialTreatment
 );
 
 module.exports = router;
