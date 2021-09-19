@@ -117,7 +117,11 @@ class Controller {
 				where: {
 					UserId,
 				},
-				include: [{ model: OrderSpecial, include: [SpecialTreatment] }],
+				include: [
+					{ model: OrderSpecial, include: [SpecialTreatment] },
+					Perfume,
+					Service,
+				],
 				order: [["updatedAt", "DESC"]],
 			});
 
