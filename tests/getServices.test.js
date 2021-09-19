@@ -34,10 +34,10 @@ afterAll((done) => {
         .catch((err) => done(err));
 });
 
-describe("GET /perfumes", () => {
+describe("GET /services", () => {
     test("success", (done) => {
         request(app)
-            .get("/perfumes")
+            .get("/services")
             .then((response) => {
                 expect(response.status).toBe(200);
                 expect(response.body[0]).toHaveProperty("id");
@@ -52,10 +52,10 @@ describe("GET /perfumes", () => {
     });
 });
 
-describe("GET /admin/perfumes", () => {
+describe("GET /admin/services", () => {
     test("success", (done) => {
         request(app)
-            .get("/admin/perfumes")
+            .get("/admin/services")
             .set("access_token", access_token)
             .then((response) => {
                 expect(response.status).toBe(200);
