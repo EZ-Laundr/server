@@ -4,6 +4,7 @@ const {
 	Perfume,
 	Service,
 	SpecialTreatment,
+	OrderSpecial,
 } = require("../models");
 const { signToken } = require("../helpers/jwt");
 const { checkPassword } = require("../helpers/bcrypt");
@@ -14,6 +15,7 @@ class AdminController {
 			let result = await Order.findAll({
 				include: [
 					{ model: User, attributes: { exclude: ["password"] } },
+					{ model: OrderSpecial, include: [SpecialTreatment] },
 					Service,
 				],
 				order: [["updatedAt", "DESC"]],
@@ -31,9 +33,12 @@ class AdminController {
 		try {
 			let result = await Order.findOne({
 				where: { id },
-				attributes: {
-					exclude: ["createdAt", "updatedAt"],
-				},
+				include: [
+					{ model: User, attributes: { exclude: ["password"] } },
+					{ model: OrderSpecial, include: [SpecialTreatment] },
+					Service,
+					Perfume,
+				],
 			});
 			res.status(200).json(result);
 		} catch (error) {
