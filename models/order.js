@@ -64,18 +64,8 @@ module.exports = (sequelize, DataTypes) => {
 					},
 				},
 			},
-			pickup: {
-				type: DataTypes.BOOLEAN,
-				allowNull: false,
-				validate: {
-					notEmpty: {
-						msg: "pickup cannot be empty",
-					},
-					notNull: {
-						msg: "pickup cannot be empty",
-					},
-				},
-			},
+			customerAddress: DataTypes.STRING,
+			rangeAddress: DataTypes.INTEGER,
 		},
 		{
 			sequelize,
