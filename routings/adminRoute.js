@@ -6,6 +6,9 @@ router.get("/orders/:id", AdminController.getById);
 router.get("/perfumes", AdminController.getPerfumes);
 router.get("/services", AdminController.getServices);
 router.get("/special-treatments", AdminController.getSpecialTreatments);
+router.get("/perfumes/:id", AdminController.getPerfumesById);
+router.get("/services/:id", AdminController.getServicesById);
+router.get("/special-treatments/:id", AdminController.getSpecialTreatmentsById);
 
 router.post("/perfumes", AdminController.addPerfume);
 router.post("/services", AdminController.addService);

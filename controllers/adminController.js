@@ -416,6 +416,78 @@ class AdminController {
 			next(err);
 		}
 	}
+
+	static async getPerfumesById(req, res, next) {
+		try {
+			const { id } = req.params;
+			let result = await Perfume.findOne({
+				where: {
+					id,
+				},
+				attributes: {
+					exclude: ["createdAt", "updatedAt"],
+				},
+			});
+
+			if (!result) {
+				throw {
+					name: "NotFound",
+				};
+			}
+
+			res.status(200).json(result);
+		} catch (error) {
+			next(error);
+		}
+	}
+
+	static async getServicesById(req, res, next) {
+		try {
+			const { id } = req.params;
+			let result = await Service.findOne({
+				where: {
+					id,
+				},
+				attributes: {
+					exclude: ["createdAt", "updatedAt"],
+				},
+			});
+
+			if (!result) {
+				throw {
+					name: "NotFound",
+				};
+			}
+
+			res.status(200).json(result);
+		} catch (error) {
+			next(error);
+		}
+	}
+
+	static async getSpecialTreatmentsById(req, res, next) {
+		try {
+			const { id } = req.params;
+			let result = await SpecialTreatment.findOne({
+				where: {
+					id,
+				},
+				attributes: {
+					exclude: ["createdAt", "updatedAt"],
+				},
+			});
+
+			if (!result) {
+				throw {
+					name: "NotFound",
+				};
+			}
+
+			res.status(200).json(result);
+		} catch (error) {
+			next(error);
+		}
+	}
 }
 
 module.exports = AdminController;
