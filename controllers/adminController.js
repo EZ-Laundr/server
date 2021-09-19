@@ -388,6 +388,34 @@ class AdminController {
 			next(error);
 		}
 	}
+
+	static async changeStatus(req, res, next) {
+		try {
+			const { id } = req.params;
+			const result = await Order.update(
+				{ status: "Done" },
+				{
+					where: {
+						id,
+					},
+				}
+			);
+
+			console.log(result);
+
+			if (!result[0]) {
+				throw {
+					name: "NotFound",
+				};
+			}
+
+			res.status(200).json({
+				msg: `Status with order id ${id} has been changed succesfully`,
+			});
+		} catch (err) {
+			next(err);
+		}
+	}
 }
 
 module.exports = AdminController;
