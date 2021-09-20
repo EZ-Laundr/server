@@ -8,6 +8,7 @@ const {
 } = require("../models");
 const { signToken } = require("../helpers/jwt");
 const { checkPassword } = require("../helpers/bcrypt");
+const axios = require("axios");
 
 class AdminController {
 	static async getOrders(req, res, next) {
@@ -486,6 +487,35 @@ class AdminController {
 			res.status(200).json(result);
 		} catch (error) {
 			next(error);
+		}
+	}
+
+	static async sendNotification(req, res, next) {
+		try {
+			const { to, email } = req.body;
+			const data = {
+				to,
+				priority: "high",
+				soundName: "default",
+				notification: {
+					title: `Hallo ${email}`,
+					body: "Laundrianmu telah selesai kamu sudah bisa mngambilna, Terima Kasih",
+				},
+			};
+			const url = "https://fcm.googleapis.com/fcm/send";
+			const serverKey =
+				"AAAAucNg-SU:APA91bFbpdcr9oj0m_-m3CIt8-akr4lcfZBXZUGHghr7xUBGXHivNmF2OCU4nYLYw75fADczq4m37N98NboNMZzpyvO9GE_lTKSZL-4Yc74uGW1NNiXpSJx1uxyfkMa43us0tMMTWh-8";
+
+			const result = await axios.post(url, data, {
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: "key=" + serverKey,
+				},
+			});
+
+			res.status(200).json({ msg: "message already sent" });
+		} catch (err) {
+			next(err);
 		}
 	}
 }
