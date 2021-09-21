@@ -494,6 +494,7 @@ class AdminController {
 
 			const userId = found.User.id;
 			const userEmail = found.User.email;
+			const transactionCode = found.codeTransaction;
 
 			const foundUser = await User.findOne({
 				where: {
@@ -514,7 +515,7 @@ class AdminController {
 			if (foundUser.notificationToken) {
 				const content = {
 					title: "EZ Loundr status",
-					body: "Pakaianmu telah selesai, Terima Kasih",
+					body: `Cucianmu dengan id ${transactionCode} telah selesai, Terima Kasih`,
 				};
 				await sendNotification(foundUser.notificationToken, content);
 			}
