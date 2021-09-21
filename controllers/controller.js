@@ -12,6 +12,7 @@ const {
 
 class Controller {
   static async getNotifPayment(req, res, next) {
+    console.log("masuk notif payment");
     try {
       let order_id = req.body.order_id;
       let status_code = req.body.status_code;
@@ -27,11 +28,30 @@ class Controller {
       if (!findOrder) {
         throw { name: "paymentFailed" };
       } else {
+        console.log("MASUK ELSE");
         const codeTrans = findOrder.codeTransaction.toString();
         const grossFromDb = findOrder.totalPrice.toString() + ".00";
         const hashSignature = sha512(
           codeTrans + status_code + grossFromDb + myServerKey
         );
+
+        console.log("======", codeTrans, "==", "====codeeeee=====");
+
+        console.log(
+          "======",
+          grossFromDb,
+          "==",
+          req.body.gross_amount,
+          "=====grossFromDb===="
+        );
+        console.log(
+          "======",
+          signatureMidTrans,
+          "===",
+          hashSignature,
+          "========="
+        );
+
         let payloadNewOrder;
 
         if (signatureMidTrans === hashSignature) {
@@ -43,6 +63,7 @@ class Controller {
               id: findOrder.id,
             },
           });
+          console.log(updateOrder, "updatee");
         }
       }
     } catch (error) {
@@ -162,6 +183,7 @@ class Controller {
           { model: OrderSpecial, include: [SpecialTreatment] },
           Perfume,
           Service,
+          User,
         ],
         order: [["updatedAt", "DESC"]],
       });
