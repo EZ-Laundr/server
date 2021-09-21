@@ -316,3 +316,22 @@ describe("PATCH /admin/orders/:id", () => {
 			});
 	});
 });
+
+describe("GET /admin/users", () => {
+	test("success", (done) => {
+		request(app)
+			.get("/admin/users")
+			.set("access_token", access_token_admin)
+			.then((response) => {
+				expect(response.status).toBe(200);
+				expect(response.body[0]).toHaveProperty("id");
+				expect(response.body[0]).toHaveProperty("email");
+				expect(response.body[0]).toHaveProperty("phoneNumber");
+				expect(response.body[0]).toHaveProperty("role");
+				done();
+			})
+			.catch((err) => {
+				done(err);
+			});
+	});
+});

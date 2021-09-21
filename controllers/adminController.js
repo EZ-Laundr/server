@@ -512,14 +512,17 @@ class AdminController {
 			);
 
 			if (foundUser.notificationToken) {
-				await sendNotification(foundUser.notificationToken);
+				const content = {
+					title: "EZ Loundr status",
+					body: "Pakaianmu telah selesai, Terima Kasih",
+				};
+				await sendNotification(foundUser.notificationToken, content);
 			}
 
 			res.status(200).json({
 				msg: `Status with order id ${id} has been changed succesfully`,
 			});
 		} catch (err) {
-			console.log(err);
 			next(err);
 		}
 	}
