@@ -2,42 +2,51 @@
     "dummyUser": {
         "phoneNumber": "123456",
         "email": "dummy@mail.com",
+        "notificationToken": null,
         "password": "dummy"
     },
     "dummyUser2": {
+        "notificationToken": null,
         "phoneNumber": "123456",
         "email": "dummy2@mail.com",
         "password": "dummy"
     },
     "dummyNoEmail": {
+        "notificationToken": null,
         "phoneNumber": "123456",
         "password": "dummy"
     },
     "dummyNoPass": {
+        "notificationToken": null,
         "phoneNumber": "123456",
         "email": "dummy@mail.com"
     },
     "dummyEmailEmptyStr": {
+        "notificationToken": null,
         "phoneNumber": "123456",
         "email": "",
         "password": "dummy"
     },
     "dummyPassEmptyStr": {
+        "notificationToken": null,
         "phoneNumber": "123456",
         "email": "dummy@mail.com",
         "password": ""
     },
     "dummyWrongEmailFormat": {
+        "notificationToken": null,
         "phoneNumber": "123456",
         "email": "dummy",
         "password": "dummy"
     },
     "dummyWrongPass": {
+        "notificationToken": null,
         "phoneNumber": "123456",
         "email": "dummy@mail.com",
         "password": "dumdum"
     },
     "dummyWrongEmail": {
+        "notificationToken": null,
         "phoneNumber": "123456",
         "email": "dumdum@mail.com",
         "password": "dummy"

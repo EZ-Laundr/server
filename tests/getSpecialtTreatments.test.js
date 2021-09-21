@@ -105,21 +105,6 @@ describe("GET /admin/special-treatments", () => {
 	});
 });
 
-describe("GET /admin/special-treatments/:id", () => {
-	test("not found", (done) => {
-		request(app)
-			.get(`/admin/special-treatments/${testedId + 1}`)
-			.set("access_token", access_token)
-			.then((response) => {
-				expect(response.status).toBe(404);
-				done();
-			})
-			.catch((err) => {
-				done(err);
-			});
-	});
-});
-
 describe("POST admin/special-treatments", () => {
 	test("success", (done) => {
 		request(app)
@@ -137,6 +122,36 @@ describe("POST admin/special-treatments", () => {
 				expect(response.body).toHaveProperty("price");
 				expect(response.body).toHaveProperty("imageUrl");
 				testedId = response.body.id;
+				done();
+			})
+			.catch((err) => {
+				done(err);
+			});
+	});
+});
+
+describe("GET /admin/special-treatments/:id", () => {
+	test("success", (done) => {
+		request(app)
+			.get(`/admin/special-treatments/${testedId}`)
+			.set("access_token", access_token)
+			.then((response) => {
+				expect(response.status).toBe(200);
+				done();
+			})
+			.catch((err) => {
+				done(err);
+			});
+	});
+});
+
+describe("GET /admin/special-treatments/:id", () => {
+	test("not found", (done) => {
+		request(app)
+			.get(`/admin/special-treatments/${testedId + 1}`)
+			.set("access_token", access_token)
+			.then((response) => {
+				expect(response.status).toBe(404);
 				done();
 			})
 			.catch((err) => {
