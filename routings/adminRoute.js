@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const AdminController = require("../controllers/adminController");
 
+router.get("/users", AdminController.getUsers);
 router.get("/orders", AdminController.getOrders);
 router.get("/orders/:id", AdminController.getById);
 router.get("/perfumes", AdminController.getPerfumes);

@@ -8,8 +8,22 @@ const {
 } = require("../models");
 const { signToken } = require("../helpers/jwt");
 const { checkPassword } = require("../helpers/bcrypt");
+const sendNotification = require("../helpers/sendNotification");
 
 class AdminController {
+	static async getUsers(req, res, next) {
+		try {
+			let result = await User.findAll({
+				order: [["updatedAt", "DESC"]],
+				attributes: { exclude: ["notificationToken", "password"] },
+			});
+
+			res.status(200).json(result);
+		} catch (error) {
+			next(error);
+		}
+	}
+
 	static async getOrders(req, res, next) {
 		try {
 			let result = await Order.findAll({
@@ -389,34 +403,6 @@ class AdminController {
 		}
 	}
 
-	static async changeStatus(req, res, next) {
-		try {
-			const { id } = req.params;
-			const result = await Order.update(
-				{ status: "Done" },
-				{
-					where: {
-						id,
-					},
-				}
-			);
-
-			console.log(result);
-
-			if (!result[0]) {
-				throw {
-					name: "NotFound",
-				};
-			}
-
-			res.status(200).json({
-				msg: `Status with order id ${id} has been changed succesfully`,
-			});
-		} catch (err) {
-			next(err);
-		}
-	}
-
 	static async getPerfumesById(req, res, next) {
 		try {
 			const { id } = req.params;
@@ -486,6 +472,55 @@ class AdminController {
 			res.status(200).json(result);
 		} catch (error) {
 			next(error);
+		}
+	}
+
+	static async changeStatus(req, res, next) {
+		try {
+			const { id } = req.params;
+
+			const found = await Order.findOne({
+				where: {
+					id,
+				},
+				include: [User],
+			});
+
+			if (!found) {
+				throw {
+					name: "NotFound",
+				};
+			}
+
+			const userId = found.User.id;
+			const userEmail = found.User.email;
+
+			const foundUser = await User.findOne({
+				where: {
+					id: userId,
+					email: userEmail,
+				},
+			});
+
+			const result = await Order.update(
+				{ status: "Done" },
+				{
+					where: {
+						id,
+					},
+				}
+			);
+
+			if (foundUser.notificationToken) {
+				await sendNotification(foundUser.notificationToken);
+			}
+
+			res.status(200).json({
+				msg: `Status with order id ${id} has been changed succesfully`,
+			});
+		} catch (err) {
+			console.log(err);
+			next(err);
 		}
 	}
 }
