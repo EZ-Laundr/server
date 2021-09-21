@@ -2,54 +2,54 @@ const { signToken } = require("../helpers/jwt");
 const { checkPassword } = require("../helpers/bcrypt");
 var sha512 = require("js-sha512");
 const {
-  User,
-  Perfume,
-  Service,
-  SpecialTreatment,
-  Order,
-  OrderSpecial,
+	User,
+	Perfume,
+	Service,
+	SpecialTreatment,
+	Order,
+	OrderSpecial,
 } = require("../models");
 
 class Controller {
-  static async getNotifPayment(req, res, next) {
-    try {
-      let order_id = req.body.order_id;
-      let status_code = req.body.status_code;
-      let myServerKey = "SB-Mid-server-qPfv763v-8yrPbfvAgrgZsMw";
-      const signatureMidTrans = req.body.signature_key;
+	static async getNotifPayment(req, res, next) {
+		try {
+			let order_id = req.body.order_id;
+			let status_code = req.body.status_code;
+			let myServerKey = "SB-Mid-server-qPfv763v-8yrPbfvAgrgZsMw";
+			const signatureMidTrans = req.body.signature_key;
 
-      const findOrder = await Order.findOne({
-        where: {
-          codeTransaction: order_id,
-        },
-      });
+			const findOrder = await Order.findOne({
+				where: {
+					codeTransaction: order_id,
+				},
+			});
 
-      if (!findOrder) {
-        throw { name: "paymentFailed" };
-      } else {
-        const codeTrans = findOrder.codeTransaction.toString();
-        const grossFromDb = findOrder.totalPrice.toString() + ".00";
-        const hashSignature = sha512(
-          codeTrans + status_code + grossFromDb + myServerKey
-        );
-        let payloadNewOrder;
+			if (!findOrder) {
+				throw { name: "paymentFailed" };
+			} else {
+				const codeTrans = findOrder.codeTransaction.toString();
+				const grossFromDb = findOrder.totalPrice.toString() + ".00";
+				const hashSignature = sha512(
+					codeTrans + status_code + grossFromDb + myServerKey
+				);
+				let payloadNewOrder;
 
-        if (signatureMidTrans === hashSignature) {
-          payloadNewOrder = {
-            statusPayment: true,
-          };
-          const updateOrder = await Order.update(payloadNewOrder, {
-            where: {
-              id: findOrder.id,
-            },
-          });
-        }
-      }
-    } catch (error) {
-      next(error);
-    }
-  }
-  
+				if (signatureMidTrans === hashSignature) {
+					payloadNewOrder = {
+						statusPayment: true,
+					};
+					const updateOrder = await Order.update(payloadNewOrder, {
+						where: {
+							id: findOrder.id,
+						},
+					});
+				}
+			}
+		} catch (error) {
+			next(error);
+		}
+	}
+
 	static async register(req, res, next) {
 		try {
 			const { email, password, phoneNumber, notificationToken } = req.body;
