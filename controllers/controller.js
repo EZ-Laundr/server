@@ -12,11 +12,12 @@ const {
 class Controller {
 	static async register(req, res, next) {
 		try {
-			const { email, password, phoneNumber } = req.body;
+			const { email, password, phoneNumber, notificationToken } = req.body;
 			const payload = {
 				email,
 				password,
 				phoneNumber,
+				notificationToken,
 				role: "customer",
 			};
 
