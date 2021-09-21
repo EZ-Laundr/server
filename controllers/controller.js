@@ -184,30 +184,38 @@ class Controller {
 				rangeAddress: rangeAddress || 0,
 				PerfumeId: perfume.id,
 			};
+
 			const result = await Order.create(payload, {
 				include: [Perfume],
 			});
 
 			const { id } = result;
 
-			const specialPayload = treatments.map((treatment) => {
-				return {
-					SpecialTreatmentId: treatment.id,
-					quantity: treatment.qty,
-					OrderId: id,
-					price: treatment.qty * treatment.price,
-				};
-			});
+			let specialPayload;
+			let result2;
+			let sumSpecialTreatmentsPrices = 0;
 
-			const result2 = await OrderSpecial.bulkCreate(specialPayload, {
-				returning: true,
-				include: [Order],
-			});
+			if (treatments) {
+				specialPayload = treatments.map((treatment) => {
+					return {
+						SpecialTreatmentId: treatment.id,
+						quantity: treatment.qty,
+						OrderId: id,
+						price: treatment.qty * treatment.price,
+					};
+				});
+				result2 = await OrderSpecial.bulkCreate(specialPayload, {
+					returning: true,
+					include: [Order],
+				});
 
-			const specialTreatmentsPrices = result2.map((e) => e.price);
-			const sumSpecialTreatmentsPrices = specialTreatmentsPrices.reduce(
-				(a, b) => a + b
-			);
+				const specialTreatmentsPrices = result2.map((e) => e.price);
+
+				sumSpecialTreatmentsPrices = specialTreatmentsPrices.reduce(
+					(a, b) => a + b
+				);
+			}
+
 			const totalPrice = sumSpecialTreatmentsPrices + perfume.price;
 
 			const result3 = await Order.update(
