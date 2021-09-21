@@ -1,231 +1,274 @@
 const { signToken } = require("../helpers/jwt");
 const { checkPassword } = require("../helpers/bcrypt");
+var sha512 = require("js-sha512");
 const {
-	User,
-	Perfume,
-	Service,
-	SpecialTreatment,
-	Order,
-	OrderSpecial,
+  User,
+  Perfume,
+  Service,
+  SpecialTreatment,
+  Order,
+  OrderSpecial,
 } = require("../models");
 
 class Controller {
-	static async register(req, res, next) {
-		try {
-			const { email, password, phoneNumber } = req.body;
-			const payload = {
-				email,
-				password,
-				phoneNumber,
-				role: "customer",
-			};
+  static async getNotifPayment(req, res, next) {
+    try {
+      let order_id = req.body.order_id;
+      let status_code = req.body.status_code;
+      let myServerKey = "SB-Mid-server-qPfv763v-8yrPbfvAgrgZsMw";
+      const signatureMidTrans = req.body.signature_key;
 
-			const result = await User.create(payload);
-			const access_token = signToken({
-				id: result.id,
-				email,
-				phoneNumber,
-				role: result.role,
-			});
-			res.status(201).json({
-				email,
-				role: result.role,
-				access_token,
-			});
-		} catch (err) {
-			next(err);
-		}
-	}
+      const findOrder = await Order.findOne({
+        where: {
+          codeTransaction: order_id,
+        },
+      });
 
-	static async login(req, res, next) {
-		try {
-			const { email, password } = req.body;
+      if (!findOrder) {
+        throw { name: "paymentFailed" };
+      } else {
+        const codeTrans = findOrder.codeTransaction.toString();
+        const grossFromDb = findOrder.totalPrice.toString() + ".00";
+        const hashSignature = sha512(
+          codeTrans + status_code + grossFromDb + myServerKey
+        );
+        let payloadNewOrder;
 
-			const result = await User.findOne({
-				where: {
-					email,
-					role: "customer",
-				},
-			});
-			if (!result) {
-				throw {
-					name: "Unauthorized",
-					msg: "invalid username or email password",
-				};
-			}
+        if (signatureMidTrans === hashSignature) {
+          payloadNewOrder = {
+            statusPayment: true,
+          };
+          const updateOrder = await Order.update(payloadNewOrder, {
+            where: {
+              id: findOrder.id,
+            },
+          });
+        }
+      }
+    } catch (error) {
+      next(error);
+    }
+  }
+  static async register(req, res, next) {
+    try {
+      const { email, password, phoneNumber } = req.body;
+      const payload = {
+        email,
+        password,
+        phoneNumber,
+        role: "customer",
+      };
 
-			const { id, phoneNumber, role } = result;
+      const result = await User.create(payload);
+      const access_token = signToken({
+        id: result.id,
+        email,
+        phoneNumber,
+        role: result.role,
+      });
+      res.status(201).json({
+        email,
+        role: result.role,
+        access_token,
+      });
+    } catch (err) {
+      next(err);
+    }
+  }
 
-			if (!checkPassword(password, result.password)) {
-				throw {
-					name: "Unauthorized",
-					msg: "invalid username or email password",
-				};
-			}
+  static async login(req, res, next) {
+    try {
+      const { email, password } = req.body;
 
-			const access_token = signToken({
-				id,
-				email,
-				phoneNumber,
-				role,
-			});
+      const result = await User.findOne({
+        where: {
+          email,
+          role: "customer",
+        },
+      });
+      if (!result) {
+        throw {
+          name: "Unauthorized",
+          msg: "invalid username or email password",
+        };
+      }
 
-			res.status(200).json({
-				email,
-				role,
-				access_token,
-			});
-		} catch (err) {
-			next(err);
-		}
-	}
+      const { id, phoneNumber, role } = result;
 
-	static async getPerfumes(req, res, next) {
-		try {
-			const result = await Perfume.findAll();
+      if (!checkPassword(password, result.password)) {
+        throw {
+          name: "Unauthorized",
+          msg: "invalid username or email password",
+        };
+      }
 
-			res.status(200).json(result);
-		} catch (err) {
-			next(err);
-		}
-	}
+      const access_token = signToken({
+        id,
+        email,
+        phoneNumber,
+        role,
+      });
 
-	static async getServices(req, res, next) {
-		try {
-			const result = await Service.findAll();
+      res.status(200).json({
+        email,
+        role,
+        access_token,
+      });
+    } catch (err) {
+      next(err);
+    }
+  }
 
-			res.status(200).json(result);
-		} catch (err) {
-			next(err);
-		}
-	}
+  static async getPerfumes(req, res, next) {
+    try {
+      const result = await Perfume.findAll();
 
-	static async getSpecialTreatments(req, res, next) {
-		try {
-			const result = await SpecialTreatment.findAll();
+      res.status(200).json(result);
+    } catch (err) {
+      next(err);
+    }
+  }
 
-			res.status(200).json(result);
-		} catch (err) {
-			next(err);
-		}
-	}
+  static async getServices(req, res, next) {
+    try {
+      const result = await Service.findAll();
 
-	static async getOrders(req, res, next) {
-		try {
-			const { id: UserId } = req.user;
-			const result = await Order.findAll({
-				where: {
-					UserId,
-				},
-				include: [
-					{ model: OrderSpecial, include: [SpecialTreatment] },
-					Perfume,
-					Service,
-				],
-				order: [["updatedAt", "DESC"]],
-			});
+      res.status(200).json(result);
+    } catch (err) {
+      next(err);
+    }
+  }
 
-			res.status(200).json(result);
-		} catch (err) {
-			next(err);
-		}
-	}
+  static async getSpecialTreatments(req, res, next) {
+    try {
+      const result = await SpecialTreatment.findAll();
 
-	static async getOrdersById(req, res, next) {
-		try {
-			const { id: UserId } = req.user;
-			const id = req.params.id;
+      res.status(200).json(result);
+    } catch (err) {
+      next(err);
+    }
+  }
 
-			const result = await Order.findOne({
-				where: {
-					id,
-					UserId,
-				},
-				include: [
-					{ model: OrderSpecial, include: [SpecialTreatment] },
-					Perfume,
-					Service,
-				],
-			});
+  static async getOrders(req, res, next) {
+    try {
+      const { id: UserId } = req.user;
+      const result = await Order.findAll({
+        where: {
+          UserId,
+        },
+        include: [
+          { model: OrderSpecial, include: [SpecialTreatment] },
+          Perfume,
+          Service,
+          { model: User, exclude: ["password"] },
+        ],
+        order: [["updatedAt", "DESC"]],
+      });
 
-			if (!result) {
-				throw {
-					name: "NotFound",
-				};
-			}
+      res.status(200).json(result);
+    } catch (err) {
+      next(err);
+    }
+  }
 
-			res.status(200).json(result);
-		} catch (err) {
-			next(err);
-		}
-	}
+  static async getOrdersById(req, res, next) {
+    try {
+      const { id: UserId } = req.user;
+      const id = req.params.id;
 
-	static async postOrders(req, res, next) {
-		try {
-			const { id: UserId } = req.user;
-			let {
-				pickup,
-				ServiceId,
-				perfume,
-				treatments,
-				customerAddress,
-				rangeAddress,
-			} = req.body;
+      const result = await Order.findOne({
+        where: {
+          id,
+          UserId,
+        },
+        include: [
+          { model: OrderSpecial, include: [SpecialTreatment] },
+          Perfume,
+          Service,
+        ],
+      });
 
-			const payload = {
-				weight: 0,
-				status: "pending",
-				totalPrice: 0,
-				pickup,
-				UserId,
-				ServiceId,
-				customerAddress: customerAddress || "",
-				rangeAddress: rangeAddress || 0,
-				PerfumeId: perfume.id,
-			};
-			const result = await Order.create(payload, {
-				include: [Perfume],
-			});
+      if (!result) {
+        throw {
+          name: "NotFound",
+        };
+      }
 
-			const { id } = result;
+      res.status(200).json(result);
+    } catch (err) {
+      next(err);
+    }
+  }
 
-			const specialPayload = treatments.map((treatment) => {
-				return {
-					SpecialTreatmentId: treatment.id,
-					quantity: treatment.qty,
-					OrderId: id,
-					price: treatment.qty * treatment.price,
-				};
-			});
+  static async postOrders(req, res, next) {
+    try {
+      const { id: UserId } = req.user;
+      let {
+        pickup,
+        ServiceId,
+        perfume,
+        treatments,
+        customerAddress,
+        rangeAddress,
+      } = req.body;
 
-			const result2 = await OrderSpecial.bulkCreate(specialPayload, {
-				returning: true,
-				include: [Order],
-			});
+      const payload = {
+        weight: 0,
+        status: "pending",
+        totalPrice: 0,
+        pickup,
+        UserId,
+        ServiceId,
+        customerAddress: customerAddress || "",
+        codeTransaction: new Date().getTime(),
+        statusPayment: false,
+        rangeAddress: rangeAddress || 0,
+        PerfumeId: perfume.id,
+      };
+      const result = await Order.create(payload, {
+        include: [Perfume],
+      });
 
-			const specialTreatmentsPrices = result2.map((e) => e.price);
-			const sumSpecialTreatmentsPrices = specialTreatmentsPrices.reduce(
-				(a, b) => a + b
-			);
-			const totalPrice = sumSpecialTreatmentsPrices + perfume.price;
+      const { id } = result;
 
-			const result3 = await Order.update(
-				{
-					totalPrice,
-				},
-				{
-					where: {
-						id,
-					},
-					returning: true,
-				}
-			);
+      const specialPayload = treatments.map((treatment) => {
+        return {
+          SpecialTreatmentId: treatment.id,
+          quantity: treatment.qty,
+          OrderId: id,
+          price: treatment.qty * treatment.price,
+        };
+      });
 
-			res.status(201).json(result3[1][0]);
-		} catch (err) {
-			next(err);
-		}
-	}
+      const result2 = await OrderSpecial.bulkCreate(specialPayload, {
+        returning: true,
+        include: [Order],
+      });
+
+      const specialTreatmentsPrices = result2.map((e) => e.price);
+      const sumSpecialTreatmentsPrices = specialTreatmentsPrices.reduce(
+        (a, b) => a + b
+      );
+      const totalPrice = sumSpecialTreatmentsPrices + perfume.price;
+
+      const result3 = await Order.update(
+        {
+          totalPrice,
+        },
+        {
+          where: {
+            id,
+          },
+          returning: true,
+        }
+      );
+
+      res.status(201).json(result3[1][0]);
+    } catch (err) {
+      console.log(err, "cek err");
+      next(err);
+    }
+  }
 }
 
 module.exports = Controller;
