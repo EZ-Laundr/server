@@ -161,6 +161,21 @@ class Controller {
 		}
 	}
 
+	static async removeToken(req, res, next) {
+		try {
+			const { id } = req.user
+			const result = await User.update({
+				notificationToken: null
+			},
+				{
+					where: { id }
+				})
+			res.status(200).json(result)
+		} catch (err) {
+			next(err)
+		}
+	}
+
 	static async postOrders(req, res, next) {
 		try {
 			const { id: UserId } = req.user;

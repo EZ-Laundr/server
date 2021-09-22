@@ -24,6 +24,8 @@ router.get("/orders/:id", Controller.getOrdersById);
 
 router.post("/orders", Controller.postOrders);
 
+router.patch('/remove-token', Controller.removeToken)
+
 router.use(onlyAdmin);
 router.use("/admin", adminRouter);
 
