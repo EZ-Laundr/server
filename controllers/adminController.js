@@ -20,6 +20,7 @@ class AdminController {
 
 			res.status(200).json(result);
 		} catch (error) {
+			/* istanbul ignore next */
 			next(error);
 		}
 	}
@@ -37,6 +38,7 @@ class AdminController {
 
 			res.status(200).json(result);
 		} catch (error) {
+			/* istanbul ignore next */
 			next(error);
 		}
 	}
@@ -75,6 +77,7 @@ class AdminController {
 			});
 			res.status(200).json(result);
 		} catch (error) {
+			/* istanbul ignore next */
 			next(error);
 		}
 	}
@@ -88,6 +91,7 @@ class AdminController {
 			});
 			res.status(200).json(result);
 		} catch (error) {
+			/* istanbul ignore next */
 			next(error);
 		}
 	}
@@ -101,6 +105,7 @@ class AdminController {
 			});
 			res.status(200).json(result);
 		} catch (error) {
+			/* istanbul ignore next */
 			next(error);
 		}
 	}
@@ -183,6 +188,7 @@ class AdminController {
 				imageUrl: result.dataValues.imageUrl,
 			});
 		} catch (error) {
+			/* istanbul ignore next */
 			next(error);
 		}
 	}
@@ -208,6 +214,7 @@ class AdminController {
 				imageUrl: result.dataValues.imageUrl,
 			});
 		} catch (error) {
+			/* istanbul ignore next */
 			next(error);
 		}
 	}
@@ -233,6 +240,7 @@ class AdminController {
 				imageUrl: result.dataValues.imageUrl,
 			});
 		} catch (error) {
+			/* istanbul ignore next */
 			next(error);
 		}
 	}

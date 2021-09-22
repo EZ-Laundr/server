@@ -67,6 +67,7 @@ describe("POST /orders", () => {
 			.set("Accept", "application/json")
 			.set("access_token", access_token_customer)
 			.send({
+				pickup: true,
 				ServiceId: 1,
 				perfume: {
 					id: 1,
@@ -76,15 +77,16 @@ describe("POST /orders", () => {
 					{
 						id: 2,
 						qty: 2,
-						price: 2000,
+						price: 4000,
 					},
 					{
 						id: 1,
 						qty: 1,
-						price: 4000,
+						price: 5000,
 					},
 				],
-				pickup: false,
+				customerAddress: "",
+				rangeAddress: 100,
 			})
 			.then((response) => {
 				expect(response.status).toBe(201);
@@ -328,6 +330,23 @@ describe("GET /admin/users", () => {
 				expect(response.body[0]).toHaveProperty("email");
 				expect(response.body[0]).toHaveProperty("phoneNumber");
 				expect(response.body[0]).toHaveProperty("role");
+				done();
+			})
+			.catch((err) => {
+				done(err);
+			});
+	});
+});
+
+describe("PATCH /remove-token", () => {
+	test("success", (done) => {
+		request(app)
+			.patch("/remove-token")
+			.set("Accept", "application/json")
+			.set("access_token", access_token_customer)
+
+			.then((response) => {
+				expect(response.status).toBe(200);
 				done();
 			})
 			.catch((err) => {

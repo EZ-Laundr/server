@@ -2,51 +2,51 @@
     "dummyUser": {
         "phoneNumber": "123456",
         "email": "dummy@mail.com",
-        "notificationToken": null,
+        "notificationToken": "dummyToken",
         "password": "dummy"
     },
     "dummyUser2": {
-        "notificationToken": null,
+        "notificationToken": "dummyToken",
         "phoneNumber": "123456",
         "email": "dummy2@mail.com",
         "password": "dummy"
     },
     "dummyNoEmail": {
-        "notificationToken": null,
+        "notificationToken": "dummyToken",
         "phoneNumber": "123456",
         "password": "dummy"
     },
     "dummyNoPass": {
-        "notificationToken": null,
+        "notificationToken": "dummyToken",
         "phoneNumber": "123456",
         "email": "dummy@mail.com"
     },
     "dummyEmailEmptyStr": {
-        "notificationToken": null,
+        "notificationToken": "dummyToken",
         "phoneNumber": "123456",
         "email": "",
         "password": "dummy"
     },
     "dummyPassEmptyStr": {
-        "notificationToken": null,
+        "notificationToken": "dummyToken",
         "phoneNumber": "123456",
         "email": "dummy@mail.com",
         "password": ""
     },
     "dummyWrongEmailFormat": {
-        "notificationToken": null,
+        "notificationToken": "dummyToken",
         "phoneNumber": "123456",
         "email": "dummy",
         "password": "dummy"
     },
     "dummyWrongPass": {
-        "notificationToken": null,
+        "notificationToken": "dummyToken",
         "phoneNumber": "123456",
         "email": "dummy@mail.com",
         "password": "dumdum"
     },
     "dummyWrongEmail": {
-        "notificationToken": null,
+        "notificationToken": "dummyToken",
         "phoneNumber": "123456",
         "email": "dumdum@mail.com",
         "password": "dummy"
