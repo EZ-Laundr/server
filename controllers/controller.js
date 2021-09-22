@@ -11,6 +11,96 @@ const {
 } = require("../models");
 
 class Controller {
+	static async removeToken(req, res, next) {
+		try {
+			const { id } = req.user
+			const result = await User.update({
+				notificationToken: null
+			},
+				{
+					where: { id }
+				})
+			res.status(200).json(result)
+		} catch (err) {
+			next(err)
+		}
+	}
+
+	static async postOrders(req, res, next) {
+		try {
+			const { id: UserId } = req.user;
+			let {
+				pickup,
+				ServiceId,
+				perfume,
+				treatments,
+				customerAddress,
+				rangeAddress,
+			} = req.body;
+
+			const payload = {
+				weight: 0,
+				status: "pending",
+				totalPrice: 0,
+				pickup,
+				UserId,
+				ServiceId,
+				customerAddress: customerAddress || "",
+				rangeAddress: rangeAddress || 0,
+				PerfumeId: perfume.id,
+			};
+
+			const result = await Order.create(payload, {
+				include: [Perfume],
+			});
+
+			const { id } = result;
+
+			let specialPayload;
+			let result2;
+			let sumSpecialTreatmentsPrices = 0;
+
+			if (treatments) {
+				specialPayload = treatments.map((treatment) => {
+					return {
+						SpecialTreatmentId: treatment.id,
+						quantity: treatment.qty,
+						OrderId: id,
+						price: treatment.qty * treatment.price,
+					};
+				});
+				result2 = await OrderSpecial.bulkCreate(specialPayload, {
+					returning: true,
+					include: [Order],
+				});
+
+				const specialTreatmentsPrices = result2.map((e) => e.price);
+
+				sumSpecialTreatmentsPrices = specialTreatmentsPrices.reduce(
+					(a, b) => a + b
+				);
+			}
+
+			const totalPrice = sumSpecialTreatmentsPrices + perfume.price;
+
+			const result3 = await Order.update(
+				{
+					totalPrice,
+				},
+				{
+					where: {
+						id,
+					},
+					returning: true,
+				}
+			);
+
+			res.status(201).json(result3[1][0]);
+		} catch (err) {
+			next(err);
+		}
+	}
+
   static async getNotifPayment(req, res, next) {
     console.log("masuk notif payment");
     try {
@@ -300,6 +390,7 @@ class Controller {
       next(err);
     }
   }
+
 }
 
 module.exports = Controller;
