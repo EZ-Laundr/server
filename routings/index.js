@@ -16,6 +16,7 @@ router.post("/admin/register", AdminController.adminRegister);
 router.get("/perfumes", Controller.getPerfumes);
 router.get("/special-treatments", Controller.getSpecialTreatments);
 router.get("/services", Controller.getServices);
+router.post("/order-notif", Controller.getNotifPayment);
 
 router.use(authentication);
 

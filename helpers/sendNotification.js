@@ -1,12 +1,12 @@
 const axios = require("axios");
 
-async function sendNotification(notificationToken) {
+async function sendNotification(notificationToken, content) {
 	const url = "https://exp.host/--/api/v2/push/send";
 	const message = {
 		to: notificationToken,
 		sound: "default",
-		title: "EZ Loundr",
-		body: "Laundrianmu telah selesai kamu sudah bisa mngambilnya, Terima Kasih",
+		title: content.title,
+		body: content.body,
 	};
 
 	const result = await axios.post(url, JSON.stringify(message), {

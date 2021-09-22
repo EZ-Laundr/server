@@ -25,8 +25,8 @@ router.patch("/orders/:id", AdminController.changeStatus);
 router.delete("/perfumes/:id", AdminController.deletePerfume);
 router.delete("/services/:id", AdminController.deleteService);
 router.delete(
-	"/special-treatments/:id",
-	AdminController.deleteSpecialTreatment
+  "/special-treatments/:id",
+  AdminController.deleteSpecialTreatment
 );
 
 module.exports = router;
