@@ -61,6 +61,14 @@ module.exports = {
 					createdAt: new Date(),
 					updatedAt: new Date(),
 				},
+				{
+					name: "Molto",
+					price: 2000,
+					imageUrl:
+						"https://ik.imagekit.io/ariefkoko/molto_jvU_6P_rah.jpeg?updatedAt=1632359278305",
+					createdAt: new Date(),
+					updatedAt: new Date(),
+				},
 			],
 			{}
 		);
