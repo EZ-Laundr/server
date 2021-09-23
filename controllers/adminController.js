@@ -522,7 +522,7 @@ class AdminController {
 
 			if (foundUser.notificationToken) {
 				const content = {
-					title: "EZ Loundr status",
+					title: "EZ Loundr",
 					body: `Cucianmu dengan id ${transactionCode} telah selesai, Terima Kasih`,
 				};
 				await sendNotification(foundUser.notificationToken, content);
